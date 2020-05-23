@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.6.0 <0.7.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
@@ -14,7 +14,8 @@ contract ETHCallOption is ERC20, ERC20Detailed {
     mapping(address => uint) private _contributions;
     uint256 private _total_contribution;
     
-    ERC20 constant private DAI_CONTRACT = ERC20(0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359);
+    ERC20 constant private DAI_CONTRACT = ERC20(0x00D811B7d33cECCFcb7435F14cCC274a31CE7F5d);
+    ERC777 constant private PBTC_CONTRACT = ERC777(0xEB770B1883Dcce11781649E8c4F1ac5F4B40C978);
     
     event OptionExercised(address indexed owner, uint256 amount);
     event OptionWrote(address indexed writer, uint256 amount);
@@ -48,16 +49,26 @@ contract ETHCallOption is ERC20, ERC20Detailed {
         emit OptionExercised(exercisor, amount);
         return true;
     }
-    
-    function writeOption() public payable beforeExpiration returns (bool success) {
-        require(msg.value > 0, "Must send eth to write option");
-        _contributions[msg.sender] = msg.value;
-        _total_contribution.add(msg.value);
-        _mint(msg.sender, msg.value);
+
+    function writeOption(uint256 amount) public payable returns (bool success) {
+        require(PBTC_CONTRACT.transferFrom(msg.sender, address(this), amount), "pBTC transfer unsuccessful");
+        _contributions[msg.sender] = amount;
+        _total_contribution.add(amount);
+        _mint(msg.sender, amount);
         emit OptionWrote(msg.sender, msg.value);
-        //console.log(msg.value, msg.sender);
         return true;
     }
+    
+    // ETH as collateral version: 
+    // function writeOption() public payable beforeExpiration returns (bool success) {
+    //     require(msg.value > 0, "Must send eth to write option");
+    //     _contributions[msg.sender] = msg.value;
+    //     _total_contribution.add(msg.value);
+    //     _mint(msg.sender, msg.value);
+    //     emit OptionWrote(msg.sender, msg.value);
+    //     //console.log(msg.value, msg.sender);
+    //     return true;
+    // }
     
     modifier afterExpiration() {
         require(block.timestamp > _expiration_timestamp, "Option contract has not expired."); // >
