@@ -31,18 +31,28 @@ contract('ETHCallOption', (accounts) => {
 
     // Test 2
     //  address of the specific contract created
-    it('View outstanding call option contract', async () => {
-        const contract_status = await contractInstance_creation.callOptionContract(expiration_ts, strike_price)
-        console.log(contract_status)
+    //it('View outstanding call option contract', async () => {
+    //    const contract_status = await contractInstance_creation.callOptionContract(expiration_ts, strike_price)
+    //    console.log(contract_status)
         //console.log(expiration_ts)
         //assert.equal(todoContent, 'this is a short text', 'The content of the new added todo is not correct')
-    })
+    //})
+
+    // Test n
+    // Contributor of the contract
+    //it('contribution', async () => {
+    //    await contractInstance.contribution(accounts[0])
+    //    const acc_contributor = await contractInstance.contribution(accounts[0])
+    //    console.log("Contribution: ", acc_contributor)
+    //})
+
 
     // Test 3
     //  write option, send contribution
     it('Write option', async () => {
         console.log(Date.now())
-        const contract_status = await contractInstance.writeOption()
+        //const contract_status = await contractInstance.writeOption()
+        const contract_status = await contractInstance.writeOption({ value: web3.utils.toWei('1', 'ether') })
         console.log(contract_status)
     })
 
@@ -54,13 +64,6 @@ contract('ETHCallOption', (accounts) => {
         console.log(contract_status)
     })
 
-    // Test n
-    // Contributor of the contract
-    it('contribution', async () => {
-        await contractInstance.contribution(accounts[0])
-        const acc_contributor = await contractInstance.contribution(accounts[0])
-        console.log("Contribution: ", acc_contributor)
-    })
 
     // Test n
     // Contributor of the contract
