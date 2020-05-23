@@ -35,13 +35,14 @@ function App() {
         />
       </div>
       <div style={{padding:40,textAlign: "left"}}>
+        {/* TODO: Create Option Selling/Buying Component and insert it here
         <SmartContractWallet
           address={address}
           injectedProvider={injectedProvider}
           localProvider={localProvider}
           price={price}
           gasPrice={gasPrice}
-        />
+        /> */}
       </div>
       <div style={{position:'fixed',textAlign:'right',right:0,bottom:20,padding:10}}>
         <Row align="middle" gutter={4}>
