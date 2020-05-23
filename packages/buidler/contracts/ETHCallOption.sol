@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+//import "@nomiclabs/buidler/console.sol";
 
 contract ETHCallOption is ERC20, ERC20Detailed {
     using SafeMath for uint256;
@@ -54,7 +55,7 @@ contract ETHCallOption is ERC20, ERC20Detailed {
         _total_contribution.add(msg.value);
         _mint(msg.sender, msg.value);
         emit OptionWrote(msg.sender, msg.value);
-        
+        //console.log(msg.value, msg.sender);
         return true;
     }
     

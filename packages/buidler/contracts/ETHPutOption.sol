@@ -49,18 +49,30 @@ contract ETHPutOption is ERC20, ERC20Detailed {
         return true;
     }
     
-    function writeOption(uint256 amount) public beforeExpiration returns (bool success) {
-        require(amount > 0, "Must write put option for at least 1 wei");
-        _contributions[msg.sender] = amount;
-        _total_contribution.add(amount);
-        _mint(msg.sender, amount);
-        uint256 dai_collateral = amount.mul(_strike);
+    //function writeOption(uint256 amount) public beforeExpiration returns (bool success) {
+    //    require(amount > 0, "Must write put option for at least 1 wei");
+    //    _contributions[msg.sender] = amount;
+    //    _total_contribution.add(amount);
+    //    _mint(msg.sender, amount);
+    //    uint256 dai_collateral = amount.mul(_strike);
+    //    require(DAI_CONTRACT.transferFrom(msg.sender, address(this), dai_collateral), "DAI transfer unsuccessful");
+    //    emit OptionWrote(msg.sender, amount);
+        
+    //    return true;
+    //}
+    
+    function writeOption() public payable beforeExpiration returns (bool success) {
+        require(msg.value > 0, "Must write put option for at least 1 wei");
+        _contributions[msg.sender] = msg.value;
+        _total_contribution.add(msg.value);
+        _mint(msg.sender, msg.value);
+        uint256 dai_collateral = msg.value.mul(_strike);
         require(DAI_CONTRACT.transferFrom(msg.sender, address(this), dai_collateral), "DAI transfer unsuccessful");
-        emit OptionWrote(msg.sender, amount);
+        emit OptionWrote(msg.sender, msg.value);
         
         return true;
     }
-    
+
     modifier afterExpiration() {
         require(block.timestamp > _expiration_timestamp, "Option contract has not expired.");
         _;
