@@ -3,9 +3,10 @@ pragma solidity >=0.6.0 <0.7.0;
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC777/IERC777Recipient.sol";
 //import "@nomiclabs/buidler/console.sol";
 
-contract ETHCallOption is ERC20, ERC20Detailed {
+contract ETHCallOption is ERC20, ERC20Detailed, IERC777Recipient {
     using SafeMath for uint256;
     
     uint256 private _expiration_timestamp;
@@ -27,6 +28,20 @@ contract ETHCallOption is ERC20, ERC20Detailed {
     {
         _expiration_timestamp = expiration_timestamp;
         _strike = strike;
+    }
+
+function tokensReceived(
+        address operator,
+        address from,
+        address to,
+        uint256 amount,
+        bytes calldata userData,
+        bytes calldata operatorData
+    ) external override {
+        require(msg.sender == address(PBTC_CONTRACT), "Invalid token");
+
+        // do stuff
+        emit ReceivedPBTC(operator, from, to, amount, userData, operatorData);
     }
     
     function contribution(address contributor) public view returns (uint256) {
