@@ -1,13 +1,16 @@
-pragma solidity >=0.6.0 <0.7.0;
+//pragma solidity >=0.6.0 <0.7.0;
+pragma solidity ^0.5.0;
 
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
-import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC20/ERC20.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC20/ERC20Detailed.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/math/SafeMath.sol";
 
-import "@openzeppelin/contracts/token/ERC777/IERC777.sol";
-import "@openzeppelin/contracts/introspection/IERC1820Registry.sol";
-import "@openzeppelin/contracts/token/ERC777/IERC777Recipient.sol";
-//import "@nomiclabs/buidler/console.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC777/ERC777.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC777/IERC777.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/introspection/IERC1820Registry.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC777/IERC777Recipient.sol";
+
+
 
 contract ETHCallOption is ERC20, ERC20Detailed, IERC777Recipient {
     using SafeMath for uint256;
@@ -23,6 +26,8 @@ contract ETHCallOption is ERC20, ERC20Detailed, IERC777Recipient {
     
     event OptionExercised(address indexed owner, uint256 amount);
     event OptionWrote(address indexed writer, uint256 amount);
+    //event ReceivedPBTC(address indexed writer, uint256 amount);
+    //event ReceivedPBTC(operator, from, to, amount, userData, operatorData);
 
     IERC1820Registry private _erc1820 = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
     bytes32 constant private TOKENS_RECIPIENT_INTERFACE_HASH = keccak256("ERC777TokensRecipient");
@@ -44,11 +49,11 @@ function tokensReceived(
         uint256 amount,
         bytes calldata userData,
         bytes calldata operatorData
-    ) external override {
+    ) external {
         require(msg.sender == address(PBTC_CONTRACT), "Invalid token");
 
         // do stuff
-        emit ReceivedPBTC(operator, from, to, amount, userData, operatorData);
+        //emit ReceivedPBTC(operator, from, to, amount, userData, operatorData);
     }
     
     function contribution(address contributor) public view returns (uint256) {

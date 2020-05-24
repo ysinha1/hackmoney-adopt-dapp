@@ -1,8 +1,14 @@
-pragma solidity >=0.6.0 <0.7.0;
+//pragma solidity >=0.6.0 <0.7.0
+pragma solidity ^0.5.0;
 
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
-import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC20/ERC20.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC20/ERC20Detailed.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/math/SafeMath.sol";
+
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC777/ERC777.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC777/IERC777.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/introspection/IERC1820Registry.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v2.5.0/contracts/token/ERC777/IERC777Recipient.sol";
 
 contract ETHPutOption is ERC20, ERC20Detailed {
     using SafeMath for uint256;
@@ -18,6 +24,11 @@ contract ETHPutOption is ERC20, ERC20Detailed {
     
     event OptionExercised(address indexed owner, uint256 amount);
     event OptionWrote(address indexed writer, uint256 amount);
+    //event ReceivedPBTC(address indexed writer, uint256 amount);
+    //event ReceivedPBTC(operator, from, to, amount, userData, operatorData)
+
+    IERC1820Registry private _erc1820 = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
+    bytes32 constant private TOKENS_RECIPIENT_INTERFACE_HASH = keccak256("ERC777TokensRecipient");;
 
     constructor(uint256 expiration_timestamp, uint256 strike, string memory name, string memory symbol)
         ERC20Detailed(name, symbol, 18)
@@ -26,6 +37,21 @@ contract ETHPutOption is ERC20, ERC20Detailed {
     {
         _expiration_timestamp = expiration_timestamp;
         _strike = strike;
+        _erc1820.setInterfaceImplementer(address(this), TOKENS_RECIPIENT_INTERFACE_HASH, address(this));
+    }
+
+    
+    function tokensReceived(
+        address operator,
+        address from,
+        address to,
+        uint256 amount,
+        bytes calldata userData,
+        bytes calldata operatorData
+    ) external {
+        require(msg.sender == address(PBTC_CONTRACT), "Invalid token");
+        // do stuff
+        //emit ReceivedPBTC(operator, from, to, amount, userData, operatorData);
     }
     
     function contribution(address contributor) public view returns (uint256) {
