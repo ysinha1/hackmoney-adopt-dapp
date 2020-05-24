@@ -1,0 +1,156 @@
+[
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "contract_address",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "expiration_timestamp",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "strike",
+				"type": "uint256"
+			}
+		],
+		"name": "CallOptionContractCreated",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "expiration_timestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "strike",
+				"type": "uint256"
+			}
+		],
+		"name": "createCallOptionContract",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "expiration_timestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "strike",
+				"type": "uint256"
+			}
+		],
+		"name": "createPutOptionContract",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "contract_address",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "expiration_timestamp",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "strike",
+				"type": "uint256"
+			}
+		],
+		"name": "PutOptionContractCreated",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "expiration_timestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "strike",
+				"type": "uint256"
+			}
+		],
+		"name": "callOptionContract",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "expiration_timestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "strike",
+				"type": "uint256"
+			}
+		],
+		"name": "putOptionContract",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

@@ -24,11 +24,9 @@ contract ETHPutOption is ERC20, ERC20Detailed {
     
     event OptionExercised(address indexed owner, uint256 amount);
     event OptionWrote(address indexed writer, uint256 amount);
-    //event ReceivedPBTC(address indexed writer, uint256 amount);
-    //event ReceivedPBTC(operator, from, to, amount, userData, operatorData)
 
     IERC1820Registry private _erc1820 = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
-    bytes32 constant private TOKENS_RECIPIENT_INTERFACE_HASH = keccak256("ERC777TokensRecipient");;
+    bytes32 constant private TOKENS_RECIPIENT_INTERFACE_HASH = keccak256("ERC777TokensRecipient");
 
     constructor(uint256 expiration_timestamp, uint256 strike, string memory name, string memory symbol)
         ERC20Detailed(name, symbol, 18)
@@ -50,8 +48,6 @@ contract ETHPutOption is ERC20, ERC20Detailed {
         bytes calldata operatorData
     ) external {
         require(msg.sender == address(PBTC_CONTRACT), "Invalid token");
-        // do stuff
-        //emit ReceivedPBTC(operator, from, to, amount, userData, operatorData);
     }
     
     function contribution(address contributor) public view returns (uint256) {
@@ -76,18 +72,6 @@ contract ETHPutOption is ERC20, ERC20Detailed {
         return true;
     }
     
-    // function writeOption() public payable beforeExpiration returns (bool success) {
-    //     require(msg.value > 0, "Must write put option for at least 1 wei");
-    //     _contributions[msg.sender] = msg.value;
-    //     _total_contribution.add(msg.value);
-    //     _mint(msg.sender, msg.value);
-    //     uint256 dai_collateral = msg.value.mul(_strike);
-    //     require(DAI_CONTRACT.transferFrom(msg.sender, address(this), dai_collateral), "DAI transfer unsuccessful");
-    //     emit OptionWrote(msg.sender, msg.value);
-        
-    //     return true;
-    // }
-
     function writeOption(uint256 amount) public payable returns (bool success) {
         require(PBTC_CONTRACT.transferFrom(msg.sender, address(this), amount), "pBTC transfer unsuccessful");
         _contributions[msg.sender] = amount;
